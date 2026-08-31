@@ -12,7 +12,9 @@ Installable Claude skills for BT Apps — recipe debugging, Jira/doc writing, an
 
 ## Install
 
-**Prerequisites:** Claude Code or Cowork, with your own Jira and Confluence MCP connections already set up (ask BT Apps if you don't have these yet). A Workato/Recipe Code connection is only needed if you'll use `recipe-debugger`.
+**Prerequisites:** **Claude Code or Cowork only** — not plain claude.ai web chat. These skills need a real local filesystem (to write `.bt-skills/config.json` and, if you use it, `.bt-skills/guidelines.md`) and MCP tool access for Jira/Confluence/Workato, neither of which plain claude.ai provides. If you only use claude.ai without Code or Cowork, this plugin won't work for you.
+
+You'll also need your own Jira and Confluence MCP connections already set up (ask BT Apps if you don't have these yet). A Workato/Recipe Code connection is only needed if you'll use `recipe-debugger`.
 
 1. Add the marketplace and install the plugin:
    ```
