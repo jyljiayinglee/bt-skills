@@ -9,15 +9,15 @@ Drafts everything that leaves your hands in writing — Jira tickets/comments, a
 
 ## Prerequisites
 
-Check for `.bt-skills/config.json` in the current workspace. If it doesn't exist, hand off to `/setup` first — this skill needs your Jira project and Confluence space to work.
+Check for `.bt-skills/config.json` in the current workspace. If it doesn't exist, or if `confluence.guidelines` isn't set, hand off to `/setup` first — this skill has no built-in templates or conventions; it reads all of them from the guidelines page `/setup` configures.
 
-Read the Confluence reference index (space key from config) for your team's:
+Read `confluence.guidelines.page_id`/`page_url` from config for your team's:
 - Doc templates and section structures
 - Jira ticket description / comment conventions
 - Recipe (or equivalent) version-comment format
 - Worked examples
 
-If the index page can't be found or the space isn't configured, ask the user for the index page URL or ask them to paste the relevant convention before drafting — do not invent a template.
+If the page can't be found, ask the user for the page URL or ask them to paste the relevant convention before drafting — do not invent a template or fall back to a generic default not sourced from their guidelines page.
 
 ## Mode Selection
 
@@ -63,30 +63,17 @@ Always gather before drafting:
 
 ### Step 2: Template Selection
 
-Select the template from your team's Confluence index. Common types:
-
-| Document Type | Use when |
-|---------------|----------|
-| **Technical Documentation** | System change, new integration, architecture |
-| **Change Log** | Version history, release notes |
-| **UAT Instructions** | Handoff to QA or business testers |
-| **Test Cases** | QA, acceptance testing |
-| **Rollback Plan** | Risk mitigation for deployments |
-| **User Guide** | End-user documentation |
+Select the document type from whatever templates are listed on the team's guidelines page (`confluence.guidelines`) — do not assume a fixed list here; the set of available document types is whatever that page currently defines, and it can grow or change independently of this skill.
 
 Confirm the selection with the user if ambiguous before drafting.
 
 ### Step 3: Audience Calibration
 
-| Audience | Style |
-|----------|-------|
-| **Technical** (developers, QA) | Precise terminology, implementation details, step-by-step procedures |
-| **Business** (PM, stakeholder) | Outcomes and timelines, business impact, minimal technical depth |
-| **End users** | Simple language, numbered steps, troubleshooting, FAQs |
+Match language, depth, and format to the target audience — technical (precise terminology, implementation detail), business (outcomes, timelines, minimal technical depth), or end user (simple language, numbered steps, troubleshooting). If the guidelines page defines its own audience-calibration guidance, follow that instead of improvising.
 
 ### Step 4: Draft
 
-Follow the template from the Confluence index exactly:
+Follow the template from the guidelines page exactly:
 
 - Sections are **mandatory** and in the **prescribed order** — do not skip or reorder
 - For empty sections: write `[Section not applicable — [reason]]` rather than deleting
@@ -116,6 +103,6 @@ Always present the draft before posting or publishing. Ask:
 
 ## Notes
 
-- Templates and conventions live on your team's Confluence index, not in this skill — ask your team lead for the index page if `.bt-skills/config.json` doesn't already point to one
+- Templates and conventions live entirely on your team's guidelines page, not in this skill — run `/setup` if `.bt-skills/config.json` doesn't already point to one (it can point to an existing page, a freshly created one, or a hybrid of both)
 - Change logs follow date-descending order: newest entry at top
 - Writes happen through your own Jira/Confluence connection — never anyone else's

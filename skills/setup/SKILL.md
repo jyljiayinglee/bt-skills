@@ -28,6 +28,25 @@ Ask the user for:
 
 Do not guess or default any of these to a specific team's values — every field comes from what the user says, or is confirmed live against their own MCP connections.
 
+## Step 2.5 — Guidelines page (existing / create / hybrid)
+
+`writer` reads a Confluence guidelines page at runtime for doc templates and ticket/comment conventions — it doesn't ship with any baked in. Ask:
+
+> "Does your team already have a documentation guidelines page on Confluence — something covering doc templates, ticket format, or comment conventions?"
+
+**Path A — Existing, complete.** They already have a page that covers this. Ask for the page URL or title, confirm it resolves via the Confluence MCP, and store its page ID/URL in config as `guidelines.source: "existing"`. Nothing is created.
+
+**Path B — None yet.** Offer to create a starter page for them, seeded from `templates/guidelines-starter.md` in this plugin — the same template/ticket/comment conventions your personal setup uses, genericized (no team-specific examples baked in). Ask where it should live (a page title + parent page in their configured Confluence space), then:
+- If they grant a Confluence write, create the page directly via their Confluence MCP and store the new page ID as `guidelines.source: "created"`.
+- If they'd rather not grant that write, hand them the rendered markdown from `templates/guidelines-starter.md` to paste in themselves, and ask them to confirm the page URL once it's up.
+
+**Path C — Hybrid (partial existing).** They have *some* conventions (e.g. a ticket-description standard) but not full doc-template coverage, or vice versa. Ask which pieces they already have covered. For each gap:
+- Compare against `templates/guidelines-starter.md`'s sections (General Conventions, Document Templates, Ticket Conventions, Comment Conventions, Version Comment, Cross-Cutting Style Rules)
+- Offer to append only the missing sections to their existing page (again, direct write if granted, or hand off the markdown snippet for those sections if not)
+- Store `guidelines.source: "hybrid"` plus the existing page ID, so `writer` knows this page is a merge and shouldn't be treated as fully self-authored
+
+In all three paths, the result is the same shape in config: one Confluence page (or set of pages) that `writer` reads at runtime. What differs is only how it got populated.
+
 ## Step 3 — Verify MCP connections
 
 Check that the user has working connections for:
@@ -48,7 +67,12 @@ Write `.bt-skills/config.json` in the current workspace root:
     "cloud_id": "..."
   },
   "confluence": {
-    "space_key": "..."
+    "space_key": "...",
+    "guidelines": {
+      "source": "existing | created | hybrid",
+      "page_id": "...",
+      "page_url": "..."
+    }
   },
   "conventions": {
     "prefixes": {},
