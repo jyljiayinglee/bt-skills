@@ -12,12 +12,24 @@ Installable Claude skills for BT Apps — recipe debugging, Jira/doc writing, an
 
 ## Install
 
-```
-/plugin marketplace add <this-repo-url>
-/plugin install bt-skills
-```
+**Prerequisites:** Claude Code or Cowork, with your own Jira and Confluence MCP connections already set up (ask BT Apps if you don't have these yet). A Workato/Recipe Code connection is only needed if you'll use `recipe-debugger`.
 
-Then run `/setup` once to configure your Jira/Confluence/Workato context — nothing is pre-configured, and nothing you enter is shared with anyone else.
+1. Add the marketplace and install the plugin:
+   ```
+   /plugin marketplace add <this-repo-url>
+   /plugin install bt-skills
+   ```
+2. Run `/setup` once. It'll ask for:
+   - Your Jira project key(s) (e.g. `BSYS`, `BTSUP`)
+   - Your Confluence space key (where formal docs get written)
+   - Any recipe/ticket prefix conventions your team uses (optional)
+   - It verifies your Jira/Confluence/Workato connections along the way and tells you if any are missing — partial setup is fine if you only need one skill.
+3. Setup writes a local `.bt-skills/config.json` in your current workspace. Nothing in it is shared with anyone else, and nothing about your team is pre-baked into the plugin itself — every installer configures their own context.
+4. You're ready — try `/recipe-debugger` on a Workato error, or `/writer` to draft a ticket or doc.
+
+**If you switch workspaces** (e.g. a different repo or folder), run `/setup` again there — config is per-workspace, not global.
+
+**If your Jira/Confluence context changes** (new project, new space), run `/setup` again anytime to update it — it'll show your current values first and ask whether to keep, update, or redo them.
 
 ## Updates
 
