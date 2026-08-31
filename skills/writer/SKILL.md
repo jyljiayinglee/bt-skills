@@ -1,6 +1,6 @@
 ---
 name: writer
-description: "Drafts Jira ticket descriptions, refinements, and work-done comments (Ticket mode), and formal template-governed documents like runbooks, UAT instructions, test cases, and change logs (Doc mode). Pulls templates and conventions from your team's Confluence reference index. Triggers on '/writer', 'draft a Jira ticket', 'write a work-done comment', 'refine this ticket', 'write technical documentation', 'write a runbook', or 'write a change log'."
+description: "Drafts Jira ticket descriptions, refinements, and work-done comments (Ticket mode), and formal template-governed documents like runbooks, UAT instructions, test cases, and change logs (Doc mode). Pulls templates and conventions from your team's configured guidelines source (Confluence, a local file, or both). Triggers on '/writer', 'draft a Jira ticket', 'write a work-done comment', 'refine this ticket', 'write technical documentation', 'write a runbook', or 'write a change log'."
 ---
 
 # Writer
@@ -9,15 +9,20 @@ Drafts everything that leaves your hands in writing — Jira tickets/comments, a
 
 ## Prerequisites
 
-Check for `.bt-skills/config.json` in the current workspace. If it doesn't exist, or if `confluence.guidelines` isn't set, hand off to `/setup` first — this skill has no built-in templates or conventions; it reads all of them from the guidelines page `/setup` configures.
+Check for `.bt-skills/config.json` in the current workspace. If it doesn't exist, or if `guidelines` isn't set, hand off to `/setup` first — this skill has no built-in templates or conventions; it reads all of them from whatever `/setup` configured.
 
-Read `confluence.guidelines.page_id`/`page_url` from config for your team's:
+Read from `guidelines.source` in config:
+- `"existing"` or `"created"` → read the Confluence page at `guidelines.confluence.page_id`/`page_url`
+- `"local"` → read the file at `guidelines.local_path` (default `.bt-skills/guidelines.md`) directly from the workspace
+- `"hybrid"` → read **both** — the Confluence page for whatever topics it covers, the local file for the rest — and merge them; if the same topic appears in both, the local file wins (it's the more recently/manually maintained one)
+
+Pull from whichever source(s) apply for:
 - Doc templates and section structures
 - Jira ticket description / comment conventions
 - Recipe (or equivalent) version-comment format
 - Worked examples
 
-If the page can't be found, ask the user for the page URL or ask them to paste the relevant convention before drafting — do not invent a template or fall back to a generic default not sourced from their guidelines page.
+If a configured source can't be found (page deleted, file missing), ask the user for the location again or ask them to paste the relevant convention before drafting — do not invent a template or fall back to a generic default not sourced from their guidelines.
 
 ## Mode Selection
 
@@ -103,6 +108,6 @@ Always present the draft before posting or publishing. Ask:
 
 ## Notes
 
-- Templates and conventions live entirely on your team's guidelines page, not in this skill — run `/setup` if `.bt-skills/config.json` doesn't already point to one (it can point to an existing page, a freshly created one, or a hybrid of both)
+- Templates and conventions live entirely in your configured guidelines source, not in this skill — run `/setup` if `.bt-skills/config.json` doesn't already point to one (Confluence, local file, or a hybrid of both)
 - Change logs follow date-descending order: newest entry at top
 - Writes happen through your own Jira/Confluence connection — never anyone else's

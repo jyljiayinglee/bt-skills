@@ -28,26 +28,39 @@ Ask the user for:
 
 Do not guess or default any of these to a specific team's values — every field comes from what the user says, or is confirmed live against their own MCP connections.
 
-## Step 2.5 — Guidelines page (existing / create / hybrid)
+## Step 2.5 — Guidelines location (full Confluence / hybrid / full local)
 
-`writer` reads a Confluence guidelines page at runtime for doc templates and ticket/comment conventions — it doesn't ship with any baked in. Ask:
+`writer` reads a guidelines source at runtime for doc templates and ticket/comment conventions — it doesn't ship with any baked in. Ask:
 
-> "Does your team already have a documentation guidelines page on Confluence — something covering doc templates, ticket format, or comment conventions?"
+> "Where should your team's guidelines live — fully on Confluence, fully as a local file, or a mix of both?"
 
-**Path A — Existing, complete.** They already have a page that covers this. Ask for the page URL or title, confirm it resolves via the Confluence MCP, and store its page ID/URL in config as `guidelines.source: "existing"`. Nothing is created.
+Genericized starter content for any of these comes from `templates/guidelines-starter.md` in this plugin (the same template/ticket/comment conventions your personal setup uses, with no team-specific examples baked in).
 
-**Path B — None yet.** Offer to create a starter page for them, seeded from `templates/guidelines-starter.md` in this plugin — the same template/ticket/comment conventions your personal setup uses, genericized (no team-specific examples baked in).
+### Path 1 — Full Confluence
 
-- **Where:** always inside the Confluence space already set in `confluence.space_key` (Step 2) — never a different space. Default title: `bt-skills Documentation Guidelines`. Default placement: top-level in that space (no parent), unless the user names a parent page (e.g. their team's existing index/home page) to nest it under instead. Confirm the final title + placement with the user before writing.
-- If they grant a Confluence write, create the page directly via their Confluence MCP at that location and store the new page ID as `guidelines.source: "created"`.
-- If they'd rather not grant that write, hand them the rendered markdown from `templates/guidelines-starter.md` to paste in themselves at that same location, and ask them to confirm the page URL once it's up.
+Everything lives on one Confluence page.
 
-**Path C — Hybrid (partial existing).** They have *some* conventions (e.g. a ticket-description standard) but not full doc-template coverage, or vice versa. Ask which pieces they already have covered. For each gap:
-- Compare against `templates/guidelines-starter.md`'s sections (General Conventions, Document Templates, Ticket Conventions, Comment Conventions, Version Comment, Cross-Cutting Style Rules)
-- Offer to append only the missing sections to their existing page (again, direct write if granted, or hand off the markdown snippet for those sections if not)
-- Store `guidelines.source: "hybrid"` plus the existing page ID, so `writer` knows this page is a merge and shouldn't be treated as fully self-authored
+- **If they already have a page covering this:** ask for the page URL/title, confirm it resolves via the Confluence MCP, store it as `guidelines.source: "existing"`. Nothing is created.
+- **If they don't have one yet:** offer to create it, always inside the Confluence space already set in `confluence.space_key` (Step 2) — never a different space. Default title: `bt-skills Documentation Guidelines`, top-level in that space unless the user names a parent page to nest it under. If granted a Confluence write, create it directly via their Confluence MCP and store the new page ID as `guidelines.source: "created"`. If not, hand them the rendered starter markdown to paste in themselves, then confirm the URL once it's up.
 
-In all three paths, the result is the same shape in config: one Confluence page (or set of pages) that `writer` reads at runtime. What differs is only how it got populated.
+### Path 2 — Hybrid (Confluence + local)
+
+Some guidelines live on Confluence, the rest live locally — e.g. a team-wide Confluence page for shared conventions, plus a local file for an individual's own shortcuts, or vice versa (an existing local file, with the Confluence piece still pending). Ask which pieces go where. Write both halves:
+
+- The Confluence half follows Path 1's create/existing logic for whatever it covers.
+- The local half is written to `.bt-skills/guidelines.md` (installer's own workspace — see Path 3) for whatever it covers.
+- Store `guidelines.source: "hybrid"` plus both locations (`page_id`/`page_url` for the Confluence half, `local_path` for the local half), so `writer` knows to read both and merge them, and knows which topics come from which.
+
+### Path 3 — Full local
+
+No Confluence involved at all.
+
+- **Where:** always `.bt-skills/guidelines.md`, in the installer's own current workspace — the same place `.bt-skills/config.json` lives. Never inside this plugin's repo, and not shared with anyone else by default (it's their own local file; sharing it with teammates, e.g. via their own team repo, is up to them).
+- If the file doesn't exist yet, write it from `templates/guidelines-starter.md` verbatim, then tell the user to edit it directly — no MCP write, no approval gate, it's their own local file.
+- If `.bt-skills/guidelines.md` already exists (prior run, or hand-authored), treat it as existing — ask whether to keep, replace, or fill in any starter sections it's missing.
+- Store `guidelines.source: "local"` and the relative path in config.
+
+In every path, the result in config is the same shape: one or two guidelines sources (Confluence page and/or local file path) that `writer` reads at runtime. What differs is only where the content lives and how it got populated.
 
 ## Step 3 — Verify MCP connections
 
@@ -69,12 +82,15 @@ Write `.bt-skills/config.json` in the current workspace root:
     "cloud_id": "..."
   },
   "confluence": {
-    "space_key": "...",
-    "guidelines": {
-      "source": "existing | created | hybrid",
+    "space_key": "..."
+  },
+  "guidelines": {
+    "source": "existing | created | hybrid | local",
+    "confluence": {
       "page_id": "...",
       "page_url": "..."
-    }
+    },
+    "local_path": ".bt-skills/guidelines.md"
   },
   "conventions": {
     "prefixes": {},
