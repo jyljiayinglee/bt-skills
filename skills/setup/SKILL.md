@@ -36,9 +36,11 @@ Do not guess or default any of these to a specific team's values — every field
 
 **Path A — Existing, complete.** They already have a page that covers this. Ask for the page URL or title, confirm it resolves via the Confluence MCP, and store its page ID/URL in config as `guidelines.source: "existing"`. Nothing is created.
 
-**Path B — None yet.** Offer to create a starter page for them, seeded from `templates/guidelines-starter.md` in this plugin — the same template/ticket/comment conventions your personal setup uses, genericized (no team-specific examples baked in). Ask where it should live (a page title + parent page in their configured Confluence space), then:
-- If they grant a Confluence write, create the page directly via their Confluence MCP and store the new page ID as `guidelines.source: "created"`.
-- If they'd rather not grant that write, hand them the rendered markdown from `templates/guidelines-starter.md` to paste in themselves, and ask them to confirm the page URL once it's up.
+**Path B — None yet.** Offer to create a starter page for them, seeded from `templates/guidelines-starter.md` in this plugin — the same template/ticket/comment conventions your personal setup uses, genericized (no team-specific examples baked in).
+
+- **Where:** always inside the Confluence space already set in `confluence.space_key` (Step 2) — never a different space. Default title: `bt-skills Documentation Guidelines`. Default placement: top-level in that space (no parent), unless the user names a parent page (e.g. their team's existing index/home page) to nest it under instead. Confirm the final title + placement with the user before writing.
+- If they grant a Confluence write, create the page directly via their Confluence MCP at that location and store the new page ID as `guidelines.source: "created"`.
+- If they'd rather not grant that write, hand them the rendered markdown from `templates/guidelines-starter.md` to paste in themselves at that same location, and ask them to confirm the page URL once it's up.
 
 **Path C — Hybrid (partial existing).** They have *some* conventions (e.g. a ticket-description standard) but not full doc-template coverage, or vice versa. Ask which pieces they already have covered. For each gap:
 - Compare against `templates/guidelines-starter.md`'s sections (General Conventions, Document Templates, Ticket Conventions, Comment Conventions, Version Comment, Cross-Cutting Style Rules)
