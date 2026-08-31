@@ -144,7 +144,14 @@ Description:
 
 **Resolution ([no change needed / fix applied / data fix required]):**
 [One sentence on what was done or why no action was needed.]
+
+[Optional: Comms note — who was notified and how, e.g. "Requester notified via Slack thread."]
 ```
+Rules:
+- Bold headers for Root Cause and Resolution — no plain text section labels.
+- Resolution sub-label must accurately reflect the action taken.
+- Comms note only if someone was notified externally; omit if self-contained.
+- Date goes in the content itself ("timed out on 17 Feb 2026"), not as a standalone prefix.
 
 ### Progress / Status Update Comment
 ```
@@ -158,10 +165,17 @@ Description:
 
 **ETA:** [if applicable]
 ```
+Rules:
+- Scannable — bullets, not paragraphs.
+- Be factual; avoid speculation or blame.
+- Omit sections that don't apply (e.g. no ETA when closing as done).
+- Comments are permanent — write as if anyone on the team will read them later.
 
 ---
 
 ## Recipe (or equivalent) Version Comment
+
+The short note pasted into a Workato recipe's version comment when saving a new version. Written for a future maintainer scanning the recipe's **Versions** tab — every version should trace back to a ticket and say what changed in one glance.
 
 ```
 {TICKET-KEY}: {imperative summary} — {what changed: step/field, before → after}.
@@ -170,6 +184,22 @@ Description:
 - Imperative, present tense: "Fix…", "Add…" — not "Fixed"/"I changed".
 - Do **not** cite version numbers — Dev/Prod versions diverge, describe the change itself.
 - One comment per save; multiple tickets → lead with each key.
+
+**Example:**
+```
+BSYS-27305: Fix internal Slack channel — Step 24 Channel name/DM was pointing to the
+External Slack Channel pill; remapped to slack_asset_monitoring so tracking posts to
+#asset-monitoring.
+```
+
+---
+
+## Recipe/System Naming Conventions
+
+- **Recipe prefix format:** `[PREFIX] TYPE | Descriptive Name` — e.g. `[CARE] REC | Cancellation Submission and Approvals`
+- **TYPE codes:** `REC` (recipe), `LF` (logic function), `BOT` (Slack bot), `PAGE` (Workflow App page), `DASHBOARD` (dashboard page)
+- **Workato workspace references:** `AHQ | [Workspace Name] (Dev/Prod)` — e.g. `AHQ | Workato Cares (Dev)`
+- **Salesforce field API names:** `CamelCase__c` format — e.g. `Pre_Sales_Partner__c`
 
 ---
 
