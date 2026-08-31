@@ -1,0 +1,18 @@
+{
+  "name": "bt-skills",
+  "description": "Installable Claude skills for BT Apps: recipe debugging, Jira/doc writing, and first-run setup",
+  "owner": {
+    "name": "Jia Ying Lee"
+  },
+  "plugins": [
+    {
+      "name": "bt-skills",
+      "description": "Debug Workato recipe errors, draft Jira tickets/comments and formal docs, and configure your own Jira/Confluence/Workato context on first run.",
+      "version": "0.1.0",
+      "source": "./",
+      "author": {
+        "name": "Jia Ying Lee"
+      }
+    }
+  ]
+}
