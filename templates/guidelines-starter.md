@@ -187,19 +187,19 @@ The short note pasted into a Workato recipe's version comment when saving a new 
 
 **Example:**
 ```
-BSYS-27305: Fix internal Slack channel — Step 24 Channel name/DM was pointing to the
-External Slack Channel pill; remapped to slack_asset_monitoring so tracking posts to
-#asset-monitoring.
+BSYS-XXXXX: Fix notification channel — Step 12 Channel name/DM was pointing to the
+wrong channel pill; remapped to slack_team_alerts so notifications post to
+#team-alerts.
 ```
 
 ---
 
 ## Recipe/System Naming Conventions
 
-- **Recipe prefix format:** `[PREFIX] TYPE | Descriptive Name` — e.g. `[CARE] REC | Cancellation Submission and Approvals`
+- **Recipe prefix format:** `[PREFIX] TYPE | Descriptive Name` — e.g. `[TEAM] REC | Order Submission and Approvals`
 - **TYPE codes:** `REC` (recipe), `LF` (logic function), `BOT` (Slack bot), `PAGE` (Workflow App page), `DASHBOARD` (dashboard page)
-- **Workato workspace references:** `AHQ | [Workspace Name] (Dev/Prod)` — e.g. `AHQ | Workato Cares (Dev)`
-- **Salesforce field API names:** `CamelCase__c` format — e.g. `Pre_Sales_Partner__c`
+- **Workato workspace references:** `AHQ | [Workspace Name] (Dev/Prod)` — e.g. `AHQ | Sample Workspace (Dev)`
+- **Salesforce field API names:** `CamelCase__c` format — e.g. `Sample_Field__c`
 
 ---
 
